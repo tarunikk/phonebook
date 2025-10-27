@@ -7,6 +7,10 @@ app.use(express.json())
 
 app.use(express.static('dist'))
 
+// Tehty 3.9-3.11 
+// Frontendistä tuotantoversio (dist) ja commit gittiin kutsulla "npm run deploy:full"
+// Render pyörii phonebook_render
+
 let persons = [
   {
     id: "1",
