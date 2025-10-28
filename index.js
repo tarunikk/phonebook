@@ -12,6 +12,10 @@ app.use(express.static('dist'))
 // Tehty 3.9-3.11 
 // Frontendistä tuotantoversio (dist) ja commit gittiin kutsulla "npm run deploy:full"
 // Render pyörii phonebook_render
+// Tehty 3.12.-3.14
+// Tietokanta personApp Mongodbssä, person.js lisätty, skeemat
+// backend hakee näytettävät puhelintiedot tietokannasta, uudet numerot tallennetaan tietokantaan
+// sovellus käynnistyy renderistä, osoite READMEssa (front ja back myös itsekseen komentoriviltä npm run dev)
 
 let persons = [
   {
@@ -138,8 +142,6 @@ app.post('/api/persons', (request, response) => {
   person.save().then(savedPerson => {
       response.json(savedPerson)
   })
-
-  console.log(`added ${newName} number ${newNumber} to phonebook`)
 })
 
 
