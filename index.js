@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
-const app = express()
-
+const Person = require('./models/person')
 var morgan = require('morgan')
+
+const app = express()
 
 app.use(express.json())
 
@@ -44,9 +46,11 @@ morgan.token('type', function (req, res) {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :type'))
 
+
 app.get('/', (request, response) => {
   response.send('<h1>Phonebook</h1>')
 })
+
 
 app.get('/info', (request, response) => {
     const date = new Date().toString()
@@ -56,20 +60,20 @@ app.get('/info', (request, response) => {
     response.send(`Phonebook has info for ${howMany} people. ${date}`)
 })
 
+
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
+// Yksittäisen henkilön tietojen tarkastelu
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = persons.find(person => person.id === id)
-  
-  if (person) {
+  Person.findById(request.params.id).then(person => {
     response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  })
 })
+
 
 /*
 app.post('/api/persons', (request, response) => {
@@ -86,6 +90,7 @@ app.post('/api/persons', (request, response) => {
 })
 */
 
+
 const generateId = () => {
   const maxId = persons.length > 0
     ? Math.max(...persons.map(n => Number(n.id)))
@@ -93,6 +98,8 @@ const generateId = () => {
   return String(maxId + 1)
 }
 
+
+// Lisätään uusi henkilö
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -122,16 +129,19 @@ app.post('/api/persons', (request, response) => {
     }) // varmistetaan että numero on uniikki
   }
 
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
     id: generateId(),
-  }
+  })
 
-  persons = persons.concat(person)
+  person.save().then(savedPerson => {
+      response.json(savedPerson)
+  })
 
-  response.json(person)
+  console.log(`added ${newName} number ${newNumber} to phonebook`)
 })
+
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
@@ -140,7 +150,8 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-const PORT = process.env.PORT || 3001
+
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
