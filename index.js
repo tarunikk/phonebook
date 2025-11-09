@@ -35,7 +35,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :t
 // backend hakee näytettävät puhelintiedot tietokannasta, uudet numerot tallennetaan tietokantaan
 // sovellus käynnistyy renderistä, osoite READMEssa (front ja back myös itsekseen komentoriviltä npm run dev)
 
-let persons = [
+let persons = [  
   {
     id: "1",
     name: "Arto Hellas",
@@ -57,7 +57,6 @@ let persons = [
     number: "39-23-6423122",
   }
 ]
-
 
 app.get('/', (request, response) => {
   response.send('<h1>Phonebook</h1>')
@@ -137,9 +136,12 @@ app.post('/api/persons', (request, response) => {
     id: generateId(),
   })
 
-  person.save().then(savedPerson => {
+  person.save()
+    .then(savedPerson => {
       response.json(savedPerson)
-  })
+      console.log(`added ${newName} number ${newNumber} to phonebook`)
+    })
+    .catch(error => next(error))
 })
 
 
