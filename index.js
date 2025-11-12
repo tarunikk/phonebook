@@ -38,30 +38,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :t
 // Tehty 3.15-3.16
 // Poistaminen päitittyy tietokantaan, virheidenkäsittely keskitetty
 // api/persons/id ja /info toimivat
-// pelkän backendin ajamiseen tarvitaan vielä let = persons, eikä sillä voida testata samoja nimiä/numeroita tietokannassa
-
-let persons = [  
-  {
-    id: "1",
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: "2",
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: "3",
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: "4",
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  }
-]
 
 app.get('/', (request, response) => {
   response.send('<h1>Phonebook</h1>')
@@ -119,20 +95,6 @@ app.post('/api/persons', (request, response, next) => {
     return response.status(400).json({
         error: 'number missing'
     })   // varmistetaan että henkilöllä on numero
-  }
-
-  const nameExists = persons.find(person => person.name === body.name)
-  if (nameExists) {
-    return response.status(400).json({
-        error: 'name must be unique'
-    }) // varmistetaan että nimi on uniikki
-  }
-
-  const numberExists = persons.find(person => person.number === body.number)
-  if (numberExists) {
-    return response.status(400).json({
-        error: 'number must be unique'
-    }) // varmistetaan että numero on uniikki
   }
 
   const person = new Person({
