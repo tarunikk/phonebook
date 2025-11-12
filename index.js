@@ -73,14 +73,6 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 
-const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(n => Number(n.id)))
-    : 0
-  return String(maxId + 1)
-}
-
-
 // Lisätään uusi henkilö
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
@@ -100,7 +92,6 @@ app.post('/api/persons', (request, response, next) => {
   const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId(),
   })
 
   person.save()
