@@ -5,15 +5,15 @@ var morgan = require('morgan')
 
 const app = express()
 
-morgan.token('type', function (req, res) { 
-    const body = req.body
-    if (body == null) {
-        return "-"
-    } else {
+morgan.token('type', function (req) { 
+  const body = req.body
+  if (body == null) {
+    return '-'
+  } else {
     return JSON.stringify([body.name, body.number])}
 })
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
@@ -38,18 +38,19 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :t
 // Tehty 3.15-3.16
 // Poistaminen päitittyy tietokantaan, virheidenkäsittely keskitetty
 // api/persons/id ja /info toimivat
+// 3.19-3.20 tehty
 
-app.get('/', (request, response) => {
+app.get('/', (response) => {
   response.send('<h1>Phonebook</h1>')
 })
 
 
-app.get('/info', (request, response) => {
-    const date = new Date().toString()
-    console.log(date)
-    const howMany = persons.length
+app.get('/info', (response) => {
+  const date = new Date().toString()
+  console.log(date)
+  const howMany = persons.length
 
-    response.send(`Phonebook has info for ${howMany} people. ${date}`)
+  response.send(`Phonebook has info for ${howMany} people. ${date}`)
 })
 
 
@@ -85,7 +86,7 @@ app.post('/api/persons', (request, response, next) => {
 
   if (!body.number) {
     return response.status(400).json({
-        error: 'number missing'
+      error: 'number missing'
     })   // varmistetaan että henkilöllä on numero
   }
 
@@ -104,11 +105,11 @@ app.post('/api/persons', (request, response, next) => {
 
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    Person.findByIdAndDelete(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 
