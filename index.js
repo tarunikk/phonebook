@@ -48,13 +48,16 @@ app.get('/', (response) => {
 app.get('/info', (response) => {
   const date = new Date().toString()
   console.log(date)
+  const persons = Person.find({}).then(persons => {
+    response.json(persons)
+  })
   const howMany = persons.length
 
   response.send(`Phonebook has info for ${howMany} people. ${date}`)
 })
 
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
@@ -108,13 +111,14 @@ app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(result => {
       response.status(204).end()
+      console.log(result.name)
     })
     .catch(error => next(error))
 })
 
 
 // olemattomien osoitteiden käsittely
-const unknownEndpoint = (request, response) => {
+const unknownEndpoint = (response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
