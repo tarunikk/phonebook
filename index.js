@@ -5,15 +5,16 @@ var morgan = require('morgan')
 
 const app = express()
 
-morgan.token('type', function (req) { 
+morgan.token('type', function (req, res) { 
   const body = req.body
+  console.log(res.body)
   if (body == null) {
     return '-'
   } else {
     return JSON.stringify([body.name, body.number])}
 })
 
-const errorHandler = (error, response, next) => {
+const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
@@ -40,12 +41,12 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :t
 // api/persons/id ja /info toimivat
 // 3.19-3.20 tehty
 
-app.get('/', (response) => {
+app.get('/', (request, response) => {
   response.send('<h1>Phonebook</h1>')
 })
 
 
-app.get('/info', (response) => {
+app.get('/info', (request, response) => {
   const date = new Date().toString()
   console.log(date)
   const persons = Person.find({}).then(persons => {
@@ -57,7 +58,7 @@ app.get('/info', (response) => {
 })
 
 
-app.get('/api/persons', (response) => {
+app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
@@ -118,7 +119,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 
 // olemattomien osoitteiden käsittely
-const unknownEndpoint = (response) => {
+const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
