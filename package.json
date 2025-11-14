@@ -7,19 +7,19 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../pb_frontend && npm run build && @powershell Copy-Item dist -Recurse ../phonebook",
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../pb_frontend && npm run build && @powershell Copy-Item dist -Recurse ../pb_backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tarunikk/phonebook.git"
+    "url": "git+https://github.com/tarunikk/fs_part4.git"
   },
   "author": "Taru Nikkanen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tarunikk/phonebook/issues"
+    "url": "https://github.com/tarunikk/fs_part4/issues"
   },
-  "homepage": "https://github.com/tarunikk/phonebook#readme",
+  "homepage": "https://github.com/tarunikk/fs_part4#readme",
   "description": "",
   "dependencies": {
     "dotenv": "^17.2.3",
