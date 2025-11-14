@@ -40,6 +40,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :t
 // Poistaminen päitittyy tietokantaan, virheidenkäsittely keskitetty
 // api/persons/id ja /info toimivat
 // 3.19-3.20 tehty
+// 3.22 linttaus tehty
 
 
 app.get('/', (request, response) => {
